@@ -12,6 +12,7 @@ public class EmployeeUIController {
     }
     @GetMapping("/add")
     public String addEmployee(){
-        return "addEmployee";
+        return "addEmployee2";
     }
+
 }

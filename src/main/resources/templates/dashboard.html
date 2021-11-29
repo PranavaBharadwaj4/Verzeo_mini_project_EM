@@ -1,17 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" >
     <title>Employee Management</title>
+    <link rel="stylesheet" href="" th:href="@{/css/dashCSS.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+    <script
+            src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Navbar</a>
+<script type="text/javascript">
+	function getAllEmployeeInfo() {
+		jQuery
+				.ajax({
+					type : 'GET',
+					cache : true,
+					async : false,
+					contentType : 'application/json',
+					dataType : 'json',
+					url : location.origin + "/allEmployee",
+					success : function(data) {
+						$('#employeeTblId')
+								.html(
+										'<table class="table  table-bordered "  id="allPat" ></table>');
+						dataTable = $('#allPat')
+								.dataTable(
+										{
+											"data" : data,
+											"bLengthChange" : false,
+											"bFilter" : true,
+											"bInfo" : false,
+											"scrollCollapse" : true,
+											"paging" : true,
+											'iDisplayLength' : 3,
+											"dom" : 'lrtip',
+											"aoColumns" : [ {
+												"mDataProp" : "name",
+												"title" : "Name",
+												"width" : "15%"
+											}, {
+												"mDataProp" : "age",
+												"title" : "Age",
+												"width" : "15%"
+											},
+
+											{
+												"mDataProp" : "salary",
+												"title" : "Salary",
+												"width" : "15%"
+											}, {
+												"mDataProp" : "department",
+												"title" : "Department",
+												"width" : "15%"
+											},
+
+											{
+												"mDataProp" : "contact",
+												"title" : "Contact",
+												"width" : "15%"
+											}, {
+												"mDataProp" : "email",
+												"title" : "Email",
+												"width" : "15%"
+											},
+
+											{
+												"mDataProp" : "",
+												"title" : "",
+												"width" : "2%"
+											},
+
+											{
+												"mDataProp" : "",
+												"title" : "",
+												"sWidth" : "2px"
+											} ],
+											"columnDefs" : [
+													{
+														"sClass" : "editTblAction",
+														"sWidth" : "20px",
+														"targets" : -1,
+														"data" : null,
+														"title" : "Edit",
+														"bSortable" : false,
+														/* "defaultContent" : "<button type='button' class='btn btn-primary' onclick='editEmployee(1)'><i>edit</i></button>" */
+														render : function(data,
+																type, row) {
+															return '<a class="btn btn-primary" href="#" onclick="addOrEditData('
+																	+ row.empId
+																	+ ')">Edit</a>';
+														}
+
+													},
+													{
+														"targets" : -2,
+														"sClass" : "editTblAction",
+														"data" : null,
+														"title" : "ReSendOTP",
+														"bSortable" : false,
+														"sWidth" : "20px",
+														//"defaultContent": "<a class='reSendOtp' title='Delete Record' href=\"\" onclick=\deleteData();return false;\"><span class='glyphicon glyphicon-trash'></span></a>"
+														render : function(data,
+																type, row) {
+															return '<a class="btn btn-danger" href="#" onclick="deleteData('
+																	+ row.empId
+																	+ ')">Delete</a>';
+														}
+													} ]
+										});
+
+					}
+				//)
+				});
+		$("#searchId").keyup(function() {
+			dataTable.fnFilter(this.value);
+			$("#allPat_filter").hide();
+		});
+
+	}
+
+	function deleteData(empId) {
+		$("#id01").modal();
+		$("#hiddenId").val(empId);
+	}
+
+	function editData(empId) {
+		$("#editInformation").modal();
+		$("#hiddenId").val(empId);
+	}
+
+	function deleteEmployeeData() {
+		jQuery.ajax({
+			type : 'DELETE',
+			cache : true,
+			async : false,
+			contentType : 'application/json',
+			dataType : 'json',
+			url : location.origin + "/remove/" + $("#hiddenId").val(),
+			success : function(data) {
+				debugger;
+				$("#id01").modal('hide');
+				window.location.assign(location.origin)
+			},
+			error : function(data) {
+				$("#id01").modal('hide');
+				window.location.assign(location.origin);
+			}
+		});
+	}
+
+	function addOrEditData(empId) {
+		$("#editInformation").modal();
+
+		jQuery.ajax({
+			type : 'GET',
+			cache : true,
+			async : false,
+			contentType : 'application/json',
+			dataType : 'json',
+			url : location.origin + "/employee/" + empId,
+			success : function(data) {
+				$("#usr").val(data.name);
+				$("#age").val(data.age);
+				$("#salaryId").val(data.salary);
+				$("#contactId").val(data.contact);
+				$("#emailId").val(data.email);
+				$("#hiddenId").val(empId);
+			}
+		});
+	}
+
+	function updateEmployee() {
+		var inputPayload = {
+			"name" : $("#usr").val(),
+			"age" : $("#age").val(),
+			"salary" : $("#salaryId").val(),
+			"contact" : $("#contactId").val(),
+		    "email" : $("#emailId").val()
+		}
+		var inputPayloadString = JSON.stringify(inputPayload);
+		jQuery.ajax({
+			type : 'PATCH',
+			cache : true,
+			async : false,
+			contentType : 'application/json',
+			dataType : 'json',
+			url : location.origin + "/update/" + $("#hiddenId").val(),
+			data : inputPayloadString,
+			success : function(data) {
+				$("#editInformation").modal('hide');
+				window.location.assign(location.origin)
+			},
+			error : function(data) {
+				$("#editInformation").modal('hide');
+				window.location.assign(location.origin);
+			}
+		});
+
+	}
+</script>
+
+
+<body onload="getAllEmployeeInfo()">
+<nav class="navbar navbar-expand-lg navbar-dark bg-prim">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" ></span>
     </button>
+    <div class = "navbar-header">
+        <a class="navbar-brand" href="#"><img th:src="@{/images/EmpL2.png}" alt="Missin Logo" class = "img-responsive logo"></a>
+    </div>
 
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
@@ -19,13 +229,7 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="add">Employee Add</a>
             </li>
         </ul>
         <form class="form-inline">
@@ -34,6 +238,110 @@
         </form>
     </div>
 </nav>
+
+
+<br />
+
+<div class="container">
+    <h3>Employee Information</h3>
+    <input type="hidden" id="hiddenId" />
+    <div id="employeeTblId"></div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="editInformation" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="color: black">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label for="usr">Name:</label> <input type="text"
+                                                                      class="form-control" id="usr">
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label>Age</label> <input type="text" class="form-control"
+                                                          id="age">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label>Contact</label> <input type="text" class="form-control"
+                                                             id="contactId">
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label>Salary</label> <input type="text" class="form-control"
+                                                             id="salaryId">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label>Email</label> <input type="email" class="form-control"
+                                                             id="emailId">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning"
+                        onclick="updateEmployee()">Update</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="id01" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="color: black">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Delete Information</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <i>Are you really Sure. You want to Continue..</i>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        onclick="deleteEmployeeData()">Delete</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
 <!--<h1>UI-says &ndash;&gt; Hello World!</h1>-->
 </body>
 </html>

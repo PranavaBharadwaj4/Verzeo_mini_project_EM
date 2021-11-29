@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="" th:href="@{/css/empAdd.css}" />
+    <meta charset="UTF-8">
+    <title>AddEmployee</title>
+    <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .bg-prim{
+            background:#442d79;
+
+        }
+    </style>
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css" />
+    <!-- Default theme -->
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.rtl.min.css" />
+    <!-- Semantic UI theme -->
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.rtl.min.css" />
+    <script
+            src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function validateEmployeeInformation() {
+            var isValidated = true;
+            if ($("#usr").val() == '') {
+                $("#nameSpanId").show();
+                isValidated = false;
+            } else {
+                $("#nameSpanId").hide();
+                isValidated = true;
+            }
+            if ($("#departmentId").val() == '') {
+                $("#departmentSpanId").show();
+                isValidated = false;
+            } else {
+                $("#departmentSpanId").hide();
+                isValidated = true;
+            }
+            if ($("#contactId").val() == '') {
+                $("#contactSpanId").show();
+                isValidated = false;
+            } else {
+                $("#contactSpanId").hide();
+                isValidated = true;
+            }
+            if ($("#emailId").val() == '') {
+                $("#emailSpanId").show();
+                isValidated = false;
+            } else {
+                $("#emailSpanId").hide();
+                isValidated = true;
+            }
+            return isValidated;
+
+        }
+
+        function saveEmployeeInformation() {
+            if (validateEmployeeInformation()) {
+                var inputPayload = {
+                    "name" : $("#usr").val(),
+                    "department" : $("#departmentId").val(),
+                    "age" : $("#age").val(),
+                    "contact" : $("#contactId").val(),
+                    "salary" : $("#salaryId").val(),
+                    "email" : $("#emailId").val()
+                }
+                var inputPayloadString = JSON.stringify(inputPayload);
+                jQuery.ajax({
+                    type : 'POST',
+                    cache : true,
+                    async : false,
+                    contentType : 'application/json',
+                    dataType : 'json',
+                    url : location.origin + "/saveEmployee",
+                    data : inputPayloadString,
+                    success : function(data) {
+                        clearAllFormData();
+                        alertify.alert('Confirmation', 'Successfully Created!!',
+                                function() {
+                                });
+                    }
+                });
+
+            }
+        }
+
+        function clearAllFormData() {
+            $("#usr").val("");
+            $("#departmentId").val("");
+            $("#contactId").val("");
+            $("#emailId").val("");
+            $("#salaryId").val("");
+        }
+
+        function hideAllErrorMessage() {
+            $("#nameSpanId").hide();
+            $("#departmentSpanId").hide();
+            $("#contactSpanId").hide();
+            $("#emailSpanId").hide();
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-prim">
+
+    <div class = "navbar-header">
+        <a class="navbar-brand" href="#"><img th:src="@{/images/EmpL2.png}" alt="Missin Logo" class = "img-responsive logo"></a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/">Employees</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+    <section class="get-in-touch">
+        <h1 class="title">Add Employee</h1>
+        <form class="contact-form row">
+            <div class="form-field col-lg-6">
+                <input id="name" class="input-text js-input" type="text" required>
+                <label class="label" for="name">Name</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <input id="email" class="input-text js-input" type="email" required>
+                <label class="label" for="email">E-mail</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <input id="department" class="input-text js-input" type="text" required>
+                <label class="label" for="department">Department</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <input id="phone" class="input-text js-input" type="text" required>
+                <label class="label" for="phone">Contact Number</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <input id="age" class="input-text js-input" type="text" required>
+                <label class="label" for="age">Age</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <input id="salary" class="input-text js-input" type="text" required>
+                <label class="label" for="salary">Salary</label>
+            </div>
+
+            <div class="form-field col-lg-12">
+                <input class="submit-btn" type="submit" value="Add Employee" onclick="saveEmployee()">
+            </div>
+        </form>
+    </section>
+
+<!--<h1 >Add Employee Page</h1>-->
+<!--<script src ="" th:src="@{/js/main.js}" ></script>-->
+
+</body>
+</html>

@@ -39,6 +39,7 @@ public class EmployeeDataController {
     @PatchMapping("/update/{empId}")
     public Employee updateEmployee(@PathVariable("empId") Integer empId, @RequestBody Employee employee){
         Employee employeeFound =  employeeRepo.findById(empId).get();
+        employeeFound.setName(employee.getName());
         employeeFound.setAge(employee.getAge());
         employeeFound.setSalary(employee.getSalary());
         employeeFound.setEmail(employee.getEmail());
