@@ -44,6 +44,7 @@ public class EmployeeDataController {
         employeeFound.setSalary(employee.getSalary());
         employeeFound.setEmail(employee.getEmail());
         employeeFound.setContact(employee.getContact());
+        employeeFound.setDepartment(employee.getDepartment());
         return employeeRepo.save(employeeFound);
 
     }
