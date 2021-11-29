@@ -6,14 +6,9 @@
     <title>AddEmployee</title>
     <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style>
-        .bg-prim{
-            background:#442d79;
 
-        }
-    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet"
           href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet"
@@ -32,34 +27,40 @@
     <script type="text/javascript">
         function validateEmployeeInformation() {
             var isValidated = true;
-            if ($("#usr").val() == '') {
+            if ($("#name").val() == '') {
                 $("#nameSpanId").show();
                 isValidated = false;
+                console.log(isValidated)
             } else {
                 $("#nameSpanId").hide();
                 isValidated = true;
             }
-            if ($("#departmentId").val() == '') {
-                $("#departmentSpanId").show();
-                isValidated = false;
-            } else {
-                $("#departmentSpanId").hide();
-                isValidated = true;
-            }
-            if ($("#contactId").val() == '') {
-                $("#contactSpanId").show();
-                isValidated = false;
-            } else {
-                $("#contactSpanId").hide();
-                isValidated = true;
-            }
-            if ($("#emailId").val() == '') {
+            if ($("#email").val() == '') {
                 $("#emailSpanId").show();
                 isValidated = false;
+                console.log(isValidated)
             } else {
                 $("#emailSpanId").hide();
                 isValidated = true;
             }
+            if ($("#contact").val() == '') {
+                $("#contactSpanId").show();
+                isValidated = false;
+                console.log(isValidated)
+            } else {
+                $("#contactSpanId").hide();
+                isValidated = true;
+            }
+            if ($("#age").val() == '') {
+                $("#ageSpanId").show();
+                isValidated = false;
+                console.log(isValidated)
+            } else {
+                $("#ageSpanId").hide();
+                isValidated = true;
+                console.log(isValidated)
+            }
+            console.log(isValidated)
             return isValidated;
 
         }
@@ -67,12 +68,12 @@
         function saveEmployeeInformation() {
             if (validateEmployeeInformation()) {
                 var inputPayload = {
-                    "name" : $("#usr").val(),
-                    "department" : $("#departmentId").val(),
+                    "name" : $("#name").val(),
+                    "department" : $("#department").val(),
                     "age" : $("#age").val(),
-                    "contact" : $("#contactId").val(),
-                    "salary" : $("#salaryId").val(),
-                    "email" : $("#emailId").val()
+                    "contact" : $("#contact").val(),
+                    "salary" : $("#salary").val(),
+                    "email" : $("#email").val()
                 }
                 var inputPayloadString = JSON.stringify(inputPayload);
                 jQuery.ajax({
@@ -95,68 +96,76 @@
         }
 
         function clearAllFormData() {
-            $("#usr").val("");
-            $("#departmentId").val("");
-            $("#contactId").val("");
-            $("#emailId").val("");
-            $("#salaryId").val("");
+            $("#name").val("");
+            $("#department").val("");
+            $("#contact").val("");
+            $("#email").val("");
+            $("#salary").val("");
+            $("#age").val("");
         }
 
         function hideAllErrorMessage() {
             $("#nameSpanId").hide();
-            $("#departmentSpanId").hide();
+            $("#ageSpanId").hide();
             $("#contactSpanId").hide();
             $("#emailSpanId").hide();
         }
     </script>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-prim">
+<body onload="hideAllErrorMessage()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-prim">
 
-    <div class = "navbar-header">
-        <a class="navbar-brand" href="#"><img th:src="@{/images/EmpL2.png}" alt="Missin Logo" class = "img-responsive logo"></a>
-    </div>
+        <div class = "navbar-header">
+            <a class="navbar-brand" href="#"><img th:src="@{/images/EmpL2.png}" alt="Missin Logo" class = "img-responsive logo"></a>
+        </div>
 
-    <div class="collapse navbar-collapse" id="navbarColor02">
-        <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item">
-                <a class="nav-link" href="/">Employees</a>
-            </li>
-        </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Employees</a>
+                </li>
+            </ul>
 
-    </div>
-</nav>
+        </div>
+    </nav>
+
+
+
     <section class="get-in-touch">
-        <h1 class="title">Add Employee</h1>
+        <h1 class="title" >Add Employee <span style="float:right; font-size:8px; " >* fields are mandatory</span></h1>
         <form class="contact-form row">
             <div class="form-field col-lg-6">
                 <input id="name" class="input-text js-input" type="text" required>
-                <label class="label" for="name">Name</label>
+                <label class="label" for="name">Name<span style="color:red">*</span></label>
+                <span id="nameSpanId" class="text-danger">Name is mandatory!</span>
             </div>
             <div class="form-field col-lg-6 ">
                 <input id="email" class="input-text js-input" type="email" required>
-                <label class="label" for="email">E-mail</label>
+                <label class="label" for="email">E-mail<span style="color:red">*</span></label>
+                <span id="emailSpanId" class="text-danger">Email is mandatory!</span>
             </div>
             <div class="form-field col-lg-6 ">
-                <input id="department" class="input-text js-input" type="text" required>
+                <input id="department" class="input-text js-input" type="text" >
                 <label class="label" for="department">Department</label>
             </div>
             <div class="form-field col-lg-6 ">
                 <input id="phone" class="input-text js-input" type="text" required>
-                <label class="label" for="phone">Contact Number</label>
+                <label class="label" for="phone">Contact Number<span style="color:red">*</span></label>
+                <span id="contactSpanId" class="text-danger">Contact Number is mandatory!</span>
             </div>
             <div class="form-field col-lg-6 ">
                 <input id="age" class="input-text js-input" type="text" required>
-                <label class="label" for="age">Age</label>
+                <label class="label" for="age">Age<span style="color:red">*</span></label>
+                <span id="ageSpanId" class="text-danger">Age is mandatory!</span>
             </div>
             <div class="form-field col-lg-6 ">
-                <input id="salary" class="input-text js-input" type="text" required>
+                <input id="salary" class="input-text js-input" type="text" >
                 <label class="label" for="salary">Salary</label>
             </div>
 
             <div class="form-field col-lg-12">
-                <input class="submit-btn" type="submit" value="Add Employee" onclick="saveEmployee()">
+                <input onclick="saveEmployeeInformation()" class="submit-btn" type="submit" value="Add Employee" >
             </div>
         </form>
     </section>

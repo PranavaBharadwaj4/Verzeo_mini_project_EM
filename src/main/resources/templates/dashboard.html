@@ -178,6 +178,7 @@
 				$("#salaryId").val(data.salary);
 				$("#contactId").val(data.contact);
 				$("#emailId").val(data.email);
+				$("#departmentId").val(data.department);
 				$("#hiddenId").val(empId);
 			}
 		});
@@ -189,6 +190,7 @@
 			"age" : $("#age").val(),
 			"salary" : $("#salaryId").val(),
 			"contact" : $("#contactId").val(),
+			"department" : $("#departmentId").val(),
 		    "email" : $("#emailId").val()
 		}
 		var inputPayloadString = JSON.stringify(inputPayload);
@@ -292,7 +294,12 @@
 
                     </div>
                     <div class="row">
-
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label>Department</label> <input type="text" class="form-control"
+                                                            id="departmentId">
+                            </div>
+                        </div>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <label>Email</label> <input type="email" class="form-control"
