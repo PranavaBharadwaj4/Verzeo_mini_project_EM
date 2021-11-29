@@ -8,6 +8,23 @@
 
 
 }
+.texty{
+
+
+
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 400;
+      color: #5543ca;
+      cursor: text;
+      background: #5543ca;
+      background: -moz-linear-gradient(left,#f4524d  0%,#5543ca 100%) !important;
+      background: -webkit-linear-gradient(left,#f4524d  0%,#5543ca 100%) !important;
+      background: linear-gradient(to right,#f4524d  0%,#5543ca  100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+
+}
 .bg-prim{
             background:#442d79;
 
@@ -85,5 +102,13 @@
   border: none;
   width:200px;
   cursor: pointer;
+}
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
 }
 

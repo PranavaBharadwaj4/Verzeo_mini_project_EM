@@ -47,3 +47,11 @@
       font-weight: 400;
       color: #5543ca;
 }
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: #442d79;
+  text-align: center;
+}
